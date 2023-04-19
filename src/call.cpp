@@ -1897,7 +1897,12 @@ bool call::executeMessage(message *curmsg)
     } else if(curmsg -> M_type == MSG_TYPE_NOP) {
         callDebug("Executing NOP at index %d.\n", curmsg->index);
         do_bookkeeping(curmsg);
-        actionResult = executeAction(NULL, curmsg);
+        if(msg_index == call_scenario->unexpected_jump) {
+            actionResult = executeAction(queued_msg, curmsg);
+        }
+        else {
+            actionResult = executeAction(NULL, curmsg);
+        }
         last_action_result = actionResult;
         if (actionResult == E_AR_RTPECHO_ERROR)
         {
